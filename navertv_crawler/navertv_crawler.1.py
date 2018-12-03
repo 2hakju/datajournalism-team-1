@@ -33,7 +33,7 @@ class Naver_Crawler:
             if date_strp >= datetime.strptime("2018-01-01", "%Y-%m-%d"):
                 #2017년 크롤링 완료 시 완료 메시지 출력 및 json 파일 작성
                 print('크롤링이 완료됐습니다.')
-                with open('navertv_nahonja_2017.json', 'w', encoding="utf-8") as make_file:
+                with open('navertv_radiostar_2017.json', 'w', encoding="utf-8") as make_file:
                     json.dump(self.data_list, make_file, ensure_ascii=False)
                 exit()
             reply_list = []
@@ -81,13 +81,13 @@ class Naver_Crawler:
                 time.sleep(3)
                 self.list_crawl()
 
-#MBC 나혼자산다 2017년 1화 네이버 tv 링크
-first_url = 'https://tv.naver.com/v/1356378/list/107821'
+#MBC 라디오스타 2017년 1화 네이버 tv 링크
+first_url = 'https://tv.naver.com/v/1353222/list/107612'
 driver = webdriver.Chrome('C:\\Users\\bumso\\datajournalism-2018\\chromedriver_win32\\chromedriver.exe')
 driver.get(first_url)
 time.sleep(3)
 
-he_name = "전현무"
+he_name = "김구라"
 
 nc = Naver_Crawler()
 nc.list_crawl()
