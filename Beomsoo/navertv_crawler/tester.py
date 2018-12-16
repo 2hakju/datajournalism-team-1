@@ -37,3 +37,12 @@ for date,rows in data_date.groupby("date"):
     
 print(data_reflist)
 
+#%%
+url = r"C:\Users\bumso\datajournalism-2018\datajournalism-team-1\Beomsoo\navertv_json_data\2015\nahonja_2015.json"
+
+with open(url, 'r', encoding = 'utf-8') as file:
+        data = pd.read_json(file, orient = 'records')
+print(data.heart_count)
+
+#%%
+"2018.05.20" >= "2018.04.12."

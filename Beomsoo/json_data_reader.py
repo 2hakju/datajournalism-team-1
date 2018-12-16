@@ -1,13 +1,15 @@
 #%%
 import json
 import pandas as pd
+from datetime import datetime
 
 # json 그냥 읽어오기
 json_data = []
-with open(r"C:\Users\bumso\datajournalism-2018\datajournalism-team-1\Bemsoo\navertv_crawler\mudo_2017.json", 'r', encoding = 'utf-8') as file:
+with open(r"C:\Users\bumso\datajournalism-2018\datajournalism-team-1\Beomsoo\navertv_json_data\2015\mudo_2015.json", 'r', encoding = 'utf-8') as file:
     pands = pd.read_json(file, orient = 'records')
 
-print(pands)
+pands
+# pands['date'][1] == datetime(2015,1,3)
 # radio_2017 = json_data[0]
 # print(json_data)
 

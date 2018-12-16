@@ -22,22 +22,30 @@ class Naver_Crawler:
             heart_count = driver.find_element_by_xpath("//em[@class = 'u_cnt _cnt']").text
             reply_count = driver.find_element_by_xpath("//span[@class = 'count _commentCount']").text
             play_count = driver.find_element_by_xpath("//span[@class = 'play']").text
-            is_ku = ku_name in driver.find_element_by_xpath("//h3[@class = '_clipTitle']").text
-            is_kim = kim_name in driver.find_element_by_xpath("//h3[@class = '_clipTitle']").text
-            # is_yang = yang_name in driver.find_element_by_xpath("//h3[@class = '_clipTitle']").text
+            is_kim = kim_name in driver.find_element_by_xpath("//h3[@class = '_clipTitle']").text   
+            is_kim2 = kim2_name in driver.find_element_by_xpath("//h3[@class = '_clipTitle']").text           
             title = driver.find_element_by_xpath("//*[@id='clipInfoArea']/div[1]/h3").text
             if "예고" in title :
                 pass
             else :  
                 try:
                     date =  driver.find_element_by_xpath('//*[@id="clipInfoArea"]/div[4]/div/dl/dd[3]').text
-                    date_strp = datetime.strptime(date, '%Y.%m.%d.')
-                except :
+                    #date_strp = datetime.strptime(date, '%Y.%m.%d.')
+                except Exception:
+                    date = driver.find_element_by_xpath('//*[@id="clipInfoArea"]/div[1]/div/span[2]').text 
+                except Exception :
                     date = driver.find_element_by_xpath('//*[@id="clipInfoArea"]/div[3]/div/dl/dd[3]').text
-                    date_strp = datetime.strptime(date, '%Y.%m.%d.')
+                finally :
+                    try : 
+                        date_strp = datetime.strptime(date, '%Y.%m.%d.')
+                    except : 
+                        date = date.replace('등록', '')
+                        date_strp = datetime.strptime(date, '%Y.%m.%d.')
+
                 data_dict['date'] =  date
+            
                 if date_strp >= datetime.strptime("2017-01-01", "%Y-%m-%d"):
-                    #2017년 크롤링 완료 시 완료 메시지 출력 및 json 파일 작성
+                    #2016년 크롤링 완료 시 완료 메시지 출력 및 json 파일 작성
                     print('크롤링이 완료됐습니다.')
                     with open('radio_2016.json', 'w', encoding="utf-8") as make_file:
                         json.dump(self.data_list, make_file, ensure_ascii=False, indent = '\t')
@@ -50,9 +58,8 @@ class Naver_Crawler:
             data_dict['heart_count'] = heart_count
             data_dict['reply_count'] =  reply_count
             data_dict['play_count'] = play_count
-            data_dict['is_ku'] = is_ku
             data_dict['is_kim'] = is_kim
-            # data_dict['is_yang'] = is_yang
+            data_dict['is_kim2'] = is_kim2
             data_dict['reply_list'] =  reply_list            
             data_dict['order_in_list'] = int(self.list_order)
                 
@@ -81,19 +88,25 @@ class Naver_Crawler:
 
                 #다음 재생목록으로 이동
                 click_path2 = '//*[@id="playlistClipScrollBox"]/div[1]/div/div/ul/li[2]/a/div/strong'
+                click_path_ex = '//*[@id="playlistClipScrollBox"]/div[1]/div/div/ul/li[2]/a/div'
                 click_element2 = driver.find_element_by_xpath(click_path2)
-                click_element2.click()
+                click_element_ex = driver.find_element_by_xpath(click_path_ex)
+                try :
+                    click_element2.click()
+                except : 
+                    click_element_ex.click()
                 time.sleep(3)
                 self.list_crawl()
 
-#MBC 복면가왕 2016년 1화 네이버 tv 링크
-first_url = 'https://tv.naver.com/v/684096'
+#MBC 라디오스타 2016년 1화 네이버 tv 링크 
+
+first_url = 'https://tv.naver.com/v/684096/list/60964'   
 driver = webdriver.Chrome('C:\\Users\\bumso\\datajournalism-2018\\chromedriver_win32\\chromedriver.exe')
 driver.get(first_url)
 time.sleep(3)
 
-ku_name = "구라"
-kim_name = "국진"
+kim_name = "구라"
+kim2_name = "국진"
 
 nc = Naver_Crawler()
 nc.list_crawl()
